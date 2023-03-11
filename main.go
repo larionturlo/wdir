@@ -3,12 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
-	"strings"
 	"os"
+	"strings"
 )
 
 const (
-	LinkDirName = "dir" 
+	LinkDirName = "dir"
 )
 
 func checkOrCreateStorage(storage string) error {
@@ -29,13 +29,13 @@ func setDir(key, path, storage string) error {
 	if len(key) == 0 {
 		return fmt.Errorf("Key is empty!")
 	}
-    if len(path) == 0 {
+	if len(path) == 0 {
 		return fmt.Errorf("Key is empty!")
 	}
 	wdStorage := fmt.Sprintf("%s/%s", strings.TrimRight(storage, "/"), strings.Trim(key, "/"))
-	
+
 	if err := checkOrCreateStorage(wdStorage); err != nil {
-		return err;
+		return err
 	}
 
 	linkDir := fmt.Sprintf("%s/%s", wdStorage, LinkDirName)
@@ -44,7 +44,7 @@ func setDir(key, path, storage string) error {
 	if err == nil {
 		os.Remove(linkDir)
 	}
-    return os.Symlink(path, linkDir)		
+	return os.Symlink(path, linkDir)
 }
 
 func getDir(key, storage string) (string, error) {
@@ -62,7 +62,7 @@ func getDir(key, storage string) (string, error) {
 	return os.Readlink(linkDir)
 }
 
-func main(){
+func main() {
 	set := flag.Bool("s", false, "The flag for save working directory by key")
 	key := flag.String("k", "", "A working directory key/name")
 	path := flag.String("p", "", "A path to working directory")
@@ -72,7 +72,7 @@ func main(){
 
 	if *set {
 		err := setDir(*key, *path, *storagePath)
-		if err!=nil {
+		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
